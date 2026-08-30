@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "evaconnect"
+version = "0.1.0"
+description = "Typed client and MCP server for the Evolute companion API (own account / own vehicle)."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+authors = [{ name = "evaconnect contributors" }]
+keywords = ["evolute", "evassist", "mcp", "vehicle"]
+dependencies = [
+    "httpx>=0.27",
+    "pydantic>=2.6",
+    "mcp>=1.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "respx>=0.21",
+]
+
+[project.scripts]
+evolute = "evaconnect.cli:main"
+evaconnect-mcp = "evaconnect.mcp_server:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
