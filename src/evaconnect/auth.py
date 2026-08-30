@@ -110,10 +110,16 @@ class TokenStore:
             "carId": self.car_id,
         }
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        body = json.dumps(payload, indent=2) + "\n"
         tmp = self.path.with_suffix(self.path.suffix + ".tmp")
-        tmp.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+        tmp.write_text(body, encoding="utf-8")
         tmp.chmod(0o600)
-        tmp.replace(self.path)
+        try:
+            tmp.replace(self.path)
+        except OSError:
+            # Docker bind-mounts refuse os.replace onto the mounted file.
+            self.path.write_text(body, encoding="utf-8")
+            tmp.unlink(missing_ok=True)
         try:
             self.path.chmod(0o600)
         except OSError:
