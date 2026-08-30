@@ -8,15 +8,19 @@ Do not publish Postgres beyond loopback.
 ```bash
 git clone <this-repo> && cd evaconnect
 cp .env.example .env
-# fill POSTGRES_PASSWORD, GRAFANA_DB_PASSWORD, Evolute tokens
+# fill POSTGRES_PASSWORD and GRAFANA_DB_PASSWORD only
 chmod 600 .env
 
-# file must exist before compose up (otherwise Docker makes a directory)
+# file MUST exist before compose up (otherwise Docker makes a directory)
+# copy AFTER the last local evolute/poller use — refresh rotates the pair
 cp /path/to/credentials.json ./credentials.json
 chmod 600 credentials.json
+test -f credentials.json   # must be a file, not a directory
 ```
 
-`credentials.json` is writable: refresh **rotates** `refreshToken`. Env-only without this file loses the new pair after the first 401.
+`credentials.json` is the source of truth. Do not put `EVOLUTE_ACCESS_TOKEN` /
+`EVOLUTE_REFRESH_TOKEN` in `.env`. If refresh returns 401, the pair is dead:
+SMS-login again on a trusted machine, scp the new file, `docker compose restart poller`.
 
 Do not commit `.env` or `credentials.json`.
 
@@ -60,6 +64,6 @@ Set the datasource URL to `db:5432` (compose service name on network `evaconnect
 
 ## 4. After a day
 
-Heartbeat panel should stay green. 401 + refresh in poller logs is expected;
-the cycle must keep writing rows. If refresh fails, replace `credentials.json`
-from a machine that can still SMS-login and recreate the container.
+Heartbeat panel should stay green. A 401 on telemetry then a **200** refresh
+is expected. A 401 on `/id-service/auth/refresh-token` means the refresh
+token is dead — replace `credentials.json` (see above) and restart poller.

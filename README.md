@@ -36,15 +36,8 @@ Remote poller + Postgres next to an existing Grafana: see [deploy/README.md](dep
 
 ## Auth
 
-Preferred: put tokens in the environment.
-
-```bash
-export EVOLUTE_ACCESS_TOKEN="…"
-export EVOLUTE_REFRESH_TOKEN="…"
-export EVOLUTE_CAR_ID="…"   # optional; otherwise the first vehicle is used
-```
-
-Alternatively, `~/.config/evolute/credentials.json` (created `chmod 600`):
+Preferred for the poller: `credentials.json` (created `chmod 600`). Refresh
+**rotates** `refreshToken`; the file is the source of truth.
 
 ```json
 {
@@ -54,9 +47,10 @@ Alternatively, `~/.config/evolute/credentials.json` (created `chmod 600`):
 }
 ```
 
-Override the path with `EVOLUTE_CREDENTIALS`. Environment variables win over
-the file. Refresh **rotates** `refreshToken`; the client writes the new pair
-back to the file and into the process env.
+Override the path with `EVOLUTE_CREDENTIALS`. Env vars
+(`EVOLUTE_ACCESS_TOKEN` / `EVOLUTE_REFRESH_TOKEN` / `EVOLUTE_CAR_ID`) fill
+missing fields only — they do not override tokens already in the file. After
+refresh the new pair is written back to the file and into the process env.
 
 Do not commit tokens, phone, VIN, IMEI, or coordinates.
 

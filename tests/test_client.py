@@ -216,6 +216,14 @@ def test_refresh_without_token_raises() -> None:
             client.refresh()
 
 
+def test_refresh_401_is_auth_error(mocked_api, client) -> None:
+    mocked_api.post("/id-service/auth/refresh-token").mock(
+        return_value=httpx.Response(401, json={"error": "rejected"})
+    )
+    with pytest.raises(EvoluteAuthError, match="replace credentials.json"):
+        client.refresh()
+
+
 def test_charge_session_empty(mocked_api, client) -> None:
     mocked_api.get("/charge-service/session/v2/current").mock(
         return_value=httpx.Response(200, content=b"")

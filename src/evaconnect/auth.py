@@ -27,9 +27,9 @@ def default_credentials_path() -> Path:
 class TokenStore:
     """In-memory tokens, optionally persisted to a chmod-600 JSON file.
 
-    Environment variables override file values on load. After refresh, the
-    new pair is written back to the file (if a path is set) and into env
-    so the current process keeps using the rotated tokens.
+    A credentials file is the source of truth when it contains tokens.
+    Env vars fill missing fields only (seed / file absent). After refresh
+    the rotated pair is written back to the file and into process env.
     """
 
     def __init__(self, path: Path | None = None) -> None:
@@ -48,6 +48,11 @@ class TokenStore:
         return store
 
     def load(self) -> None:
+        if self.path and self.path.is_dir():
+            log.warning(
+                "credentials path is a directory (docker created it because "
+                "the file was missing at compose up); not a token file"
+            )
         if self.path and self.path.is_file():
             try:
                 data = json.loads(self.path.read_text(encoding="utf-8"))
@@ -62,12 +67,19 @@ class TokenStore:
                 self.user_token = data.get("userToken") or data.get("user_token")
                 self.widget_id = data.get("widgetId") or data.get("widget_id")
                 self.car_id = data.get("carId") or data.get("car_id")
-        if os.environ.get(ENV_ACCESS):
+        # Env only fills blanks so a stale compose .env cannot override a rotated file.
+        if not self.access_token and os.environ.get(ENV_ACCESS):
             self.access_token = os.environ[ENV_ACCESS]
-        if os.environ.get(ENV_REFRESH):
+        if not self.refresh_token and os.environ.get(ENV_REFRESH):
             self.refresh_token = os.environ[ENV_REFRESH]
-        if os.environ.get(ENV_CAR_ID):
+        if not self.car_id and os.environ.get(ENV_CAR_ID):
             self.car_id = os.environ[ENV_CAR_ID]
+        log.info(
+            "tokens loaded has_access=%s has_refresh=%s creds_is_file=%s",
+            self.has_access(),
+            self.has_refresh(),
+            bool(self.path and self.path.is_file()),
+        )
 
     def apply_tokens(self, tokens: AuthTokens) -> None:
         if tokens.access_token:

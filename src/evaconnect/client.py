@@ -174,12 +174,19 @@ class EvoluteClient:
             raise EvoluteAuthError("refresh already in progress")
         self._refreshing = True
         try:
-            response = self._request(
-                "POST",
-                "/id-service/auth/refresh-token",
-                auth=False,
-                json={"refreshToken": self.tokens.refresh_token},
-            )
+            try:
+                response = self._request(
+                    "POST",
+                    "/id-service/auth/refresh-token",
+                    auth=False,
+                    json={"refreshToken": self.tokens.refresh_token},
+                )
+            except EvoluteAPIError as exc:
+                if exc.status_code == 401:
+                    raise EvoluteAuthError(
+                        "refresh token rejected; replace credentials.json"
+                    ) from exc
+                raise
             tokens = AuthTokens.model_validate(self._json(response) or {})
             self.tokens.apply_tokens(tokens)
             self._apply_access_token()
