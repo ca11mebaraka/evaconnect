@@ -1,0 +1,46 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: evaconnect
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: evaconnect
+      GRAFANA_DB_PASSWORD: ${GRAFANA_DB_PASSWORD:?set GRAFANA_DB_PASSWORD in .env}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ./sql/init-grafana-ro.sh:/docker-entrypoint-initdb.d/02-grafana-ro.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U evaconnect -d evaconnect"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - evaconnect
+
+  poller:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://evaconnect:${POSTGRES_PASSWORD}@db:5432/evaconnect
+      EVOLUTE_CREDENTIALS: /data/credentials.json
+      SCHEMA_PATH: /app/sql/schema.sql
+    volumes:
+      - ./credentials.json:/data/credentials.json
+    networks:
+      - evaconnect
+
+volumes:
+  pgdata:
+
+networks:
+  evaconnect:
+    name: evaconnect

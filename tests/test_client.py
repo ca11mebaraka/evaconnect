@@ -223,6 +223,13 @@ def test_charge_session_empty(mocked_api, client) -> None:
     assert client.get_charge_session() is None
 
 
+def test_charge_session_404_is_empty(mocked_api, client) -> None:
+    mocked_api.get("/charge-service/session/v2/current").mock(
+        return_value=httpx.Response(404, json={"error": "not found"})
+    )
+    assert client.get_charge_session() is None
+
+
 def test_charge_session_present(mocked_api, client) -> None:
     mocked_api.get("/charge-service/session/v2/current").mock(
         return_value=httpx.Response(200, json={"status": "charging", "power": 7})
@@ -232,7 +239,7 @@ def test_charge_session_present(mocked_api, client) -> None:
     assert session.model_dump()["status"] == "charging"
 
 
-def test_list_trips_uses_hypothesized_sort(mocked_api, client) -> None:
+def test_list_trips_uses_confirmed_sort(mocked_api, client) -> None:
     route = mocked_api.post(f"/car-service/travels/search/{FAKE_CAR_ID}").mock(
         return_value=httpx.Response(
             200,
@@ -243,8 +250,8 @@ def test_list_trips_uses_hypothesized_sort(mocked_api, client) -> None:
     assert page.rows[0].id == 101
     assert page.rows[0].distance == 8500
     body = route.calls.last.request.content.decode()
-    assert '"by":"startDate"' in body.replace(" ", "")
-    assert '"dir":"desc"' in body.replace(" ", "")
+    assert '"by":"DATE"' in body.replace(" ", "")
+    assert '"dir":"DESC"' in body.replace(" ", "")
 
 
 def test_list_trips_sort_is_parameterized(mocked_api, client) -> None:

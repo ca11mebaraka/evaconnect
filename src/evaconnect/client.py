@@ -292,7 +292,13 @@ class EvoluteClient:
         return telemetry
 
     def get_charge_session(self) -> ChargeSession | None:
-        response = self._request("GET", "/charge-service/session/v2/current")
+        """GET /charge-service/session/v2/current. 404 means not charging."""
+        try:
+            response = self._request("GET", "/charge-service/session/v2/current")
+        except EvoluteAPIError as exc:
+            if exc.status_code == 404:
+                return None
+            raise
         data = self._json(response)
         if data is None or data == {}:
             return None
@@ -319,9 +325,9 @@ class EvoluteClient:
     ) -> TripPage:
         """POST /car-service/travels/search/{carId}.
 
-        ``sort_by`` / ``sort_dir`` default to the hypothesized ``startDate`` /
-        ``desc``. Pass other values explicitly — do not invent more defaults.
-        ``distance`` is a raw int; units are unknown.
+        ``sort_by`` / ``sort_dir`` default to live-confirmed ``DATE`` / ``DESC``.
+        Allowed ``by``: ``DATE``, ``DURATION``, ``DISTANCE``. Allowed ``dir``:
+        ``ASC``, ``DESC``. ``distance`` is a raw int; units are unknown.
         """
         response = self._request(
             "POST",

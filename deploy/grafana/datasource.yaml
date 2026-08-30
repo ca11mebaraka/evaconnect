@@ -1,0 +1,22 @@
+# Copy into Grafana provisioning (datasources/).
+# Host Grafana (this file as-is): url 127.0.0.1:5432
+# Grafana in Docker on the evaconnect network: change url to db:5432
+#   docker network connect evaconnect <grafana-container>
+apiVersion: 1
+
+datasources:
+  - name: Evaconnect
+    uid: evaconnect-pg
+    type: postgres
+    access: proxy
+    isDefault: false
+    editable: true
+    url: 127.0.0.1:5432
+    user: grafana_ro
+    secureJsonData:
+      password: ${GRAFANA_DB_PASSWORD}
+    jsonData:
+      database: evaconnect
+      sslmode: disable
+      postgresVersion: 1600
+      timescaledb: false

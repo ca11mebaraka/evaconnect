@@ -17,9 +17,9 @@ HEADER_ACCESS_TOKEN: Final[str] = "access-token"
 # Telemetry must not be polled faster than this (prefer on-demand).
 MIN_TELEMETRY_INTERVAL_S: Final[float] = 5.0
 
-# Hypothesized trip sort (dump typed these as strings only). Callers may override.
-DEFAULT_TRIP_SORT_BY: Final[str] = "startDate"
-DEFAULT_TRIP_SORT_DIR: Final[str] = "desc"
+# Confirmed against live evy-car-service: by in DATE|DURATION|DISTANCE, dir in ASC|DESC.
+DEFAULT_TRIP_SORT_BY: Final[str] = "DATE"
+DEFAULT_TRIP_SORT_DIR: Final[str] = "DESC"
 
 DEFAULT_PAGE_LIMIT: Final[int] = 20
 

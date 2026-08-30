@@ -69,11 +69,11 @@ TOOL_SPECS: tuple[ToolSpec, ...] = (
                 "offset": {"type": "integer", "default": 0, "minimum": 0},
                 "sort_by": {
                     "type": "string",
-                    "description": "Hypothesized default is startDate.",
+                    "description": "DATE, DURATION, or DISTANCE. Default DATE.",
                 },
                 "sort_dir": {
                     "type": "string",
-                    "description": "Hypothesized default is desc.",
+                    "description": "ASC or DESC. Default DESC.",
                 },
                 "include_pii": {
                     "type": "boolean",

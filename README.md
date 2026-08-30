@@ -15,13 +15,24 @@ Python 3.12+.
 cd /Users/nmel/Documents/Projects/evaconnect
 python3.12 -m venv .venv
 source .venv/bin/activate
-pip install -e ".[dev]"
+pip install ".[dev]"
+```
+
+Editable (`pip install -e`) is optional. On Python 3.14 / macOS the hatchling
+`.pth` is often marked hidden, and 3.14 then skips it — `evolute` fails with
+`No module named 'evaconnect'`. Either install without `-e`, or after `-e` run:
+
+```bash
+chflags nohidden .venv/lib/python*/site-packages/*.pth
 ```
 
 Entry points after install:
 
 - `evolute` — small CLI (`status`, `trips`, `vehicles`, `info`)
 - `evaconnect-mcp` — stdio MCP server
+- `evaconnect-poller` — write telemetry/trips to Postgres for Grafana
+
+Remote poller + Postgres next to an existing Grafana: see [deploy/README.md](deploy/README.md).
 
 ## Auth
 
@@ -141,8 +152,8 @@ pytest
 ## Spec gaps (explicit parameters, no guessing)
 
 - Phone / `phoneCountry` format is unknown — pass them as strings.
-- Trip `sort.by` / `dir` are hypothesized as `startDate` / `desc`; both are
-  parameters.
+- Trip `sort.by` / `dir` default to live-confirmed `DATE` / `DESC`
+  (`DURATION` / `DISTANCE` and `ASC` are also valid).
 - `distance` units (m vs km) are unknown — raw `int`, no conversion.
 - Access-token TTL is unknown — one auto-refresh on HTTP 401, no loop.
 - Charge-session body when charging is not fully specified.
