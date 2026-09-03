@@ -1,0 +1,23 @@
+meta {
+  name: sign in
+  type: http
+  seq: 3
+}
+post {
+  url: {{baseUrl}}/id-service/auth/sign-in
+}
+headers {
+  accept: application/json
+  content-type: application/json
+  cache-control: no-cache
+  x-device: android
+  x-app: mobile
+  x-app-version: 5.1.22 (740)
+}
+
+body:json {
+  {
+    "phone": "{{phone}}",
+    "code": "{{otp}}"
+  }
+}

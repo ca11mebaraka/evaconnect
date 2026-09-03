@@ -1,0 +1,25 @@
+meta {
+  name: search vehicles
+  type: http
+  seq: 7
+}
+post {
+  url: {{baseUrl}}/car-service/car/v2/search
+}
+headers {
+  accept: application/json
+  content-type: application/json
+  cache-control: no-cache
+  x-device: android
+  x-app: mobile
+  x-app-version: 5.1.22 (740)
+  access-token: {{accessToken}}
+}
+
+body:json {
+  {
+    "limit": 20,
+    "offset": 0,
+    "filters": []
+  }
+}

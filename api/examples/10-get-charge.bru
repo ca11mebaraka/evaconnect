@@ -1,0 +1,17 @@
+meta {
+  name: get charge session
+  type: http
+  seq: 10
+}
+get {
+  url: {{baseUrl}}/charge-service/session/v2/current
+}
+headers {
+  accept: application/json
+  content-type: application/json
+  cache-control: no-cache
+  x-device: android
+  x-app: mobile
+  x-app-version: 5.1.22 (740)
+  access-token: {{accessToken}}
+}

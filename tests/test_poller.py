@@ -52,6 +52,8 @@ def test_trip_row_omits_description() -> None:
     assert row["distance"] == 8500
     assert row["odo_first"] == 1000
     assert row["odo_last"] == 1008
+    assert row["battery_first"] == 80
+    assert row["battery_last"] == 74
     assert "description" not in row
     assert "redacted-address-placeholder" not in json.dumps(row)
 

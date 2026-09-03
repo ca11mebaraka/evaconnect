@@ -53,6 +53,8 @@ Read-only user `grafana_ro` is created on first Postgres init (password =
 2. Copy [`grafana/dashboards/evolute.json`](grafana/dashboards/evolute.json)
    via [`grafana/dashboard-provider.yaml`](grafana/dashboard-provider.yaml)
    or import the JSON. Datasource uid must stay `evaconnect-pg`.
+   Provider folder name is **Evolute**. Dashboard uid `evaconnect-evolute`,
+   timezone `Europe/Moscow`, refresh 30s.
 
 **Grafana in Docker on this host**
 
@@ -62,7 +64,36 @@ docker network connect evaconnect <grafana-container>
 
 Set the datasource URL to `db:5432` (compose service name on network `evaconnect`).
 
-## 4. After a day
+## 4. Dashboard layout
+
+JSON: [`grafana/dashboards/evolute.json`](grafana/dashboards/evolute.json).
+
+**Обзор** (same nine panels as the first dashboard revision):
+
+- Battery % and remaining range (raw API units)
+- Temperatures: cabin, outside, battery
+- 12V battery
+- Stats: Online, Central lock, Odometer (raw), Poller heartbeat
+- Recent trips: `title` is `HH:MM - HH:MM` in Europe/Moscow from `start_date` /
+  `end_date` (milliseconds). No addresses.
+
+Additional rows use poller columns plus `telemetry.raw`:
+
+- **Сейчас** — ignition, park, charge gun, signal, climate setpoints, last
+  snapshot table, read-only command catalog from `raw.status.buttons`
+- **Зарядка** — charge-gun 0/1 over time
+- **Климат** — coolant, climate target, fan
+- **Кузов** — `doorFLStatus` / `FR` / `RL` / `RR`, trunk, headlights
+  (`raw->sensors`)
+- **Движение** — odometer, ignition, park, signal
+- **Служебные сенсоры** — fuel / firmware / settings keys as the API sent them
+- **Поездки** — `battery_first` / `battery_last` plus distance chart
+- **Poller** — cycle duration_ms and error rows
+
+Doors and extra sensors are not columns; they live in JSONB `telemetry.raw`
+(geo keys `lat`/`lon`/`course` are stripped by the poller).
+
+## 5. After a day
 
 Heartbeat panel should stay green. A 401 on telemetry then a **200** refresh
 is expected. A 401 on `/id-service/auth/refresh-token` means the refresh

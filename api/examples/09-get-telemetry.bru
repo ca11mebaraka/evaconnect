@@ -1,0 +1,17 @@
+meta {
+  name: get telemetry
+  type: http
+  seq: 9
+}
+get {
+  url: {{baseUrl}}/client-bff-service/telemetry/{{imei}}
+}
+headers {
+  accept: application/json
+  content-type: application/json
+  cache-control: no-cache
+  x-device: android
+  x-app: mobile
+  x-app-version: 5.1.22 (740)
+  access-token: {{accessToken}}
+}

@@ -1,0 +1,3 @@
+# Keep this directory for redacted HAR / curl dumps.
+# Strip access-token, refreshToken, cookie, phone, VIN, IMEI, coordinates,
+# and account ids before commit.

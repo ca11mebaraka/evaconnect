@@ -1,0 +1,166 @@
+@baseUrl = https://app.evassist.ru
+@accessToken = <YOUR_TOKEN>
+@refreshToken = <YOUR_REFRESH_TOKEN>
+@carId = aaaaaaaaaaaaaaaaaaaaaaaa
+@imei = 000000000000000
+@travelId = 84
+@startTime = 1700000000
+@phone = 00000000000
+@phoneCountry = XX
+@otp = 000000
+
+### Service bootstrap
+GET {{baseUrl}}/id-service/info
+accept: application/json
+content-type: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+
+### Request SMS OTP (one SMS per call)
+POST {{baseUrl}}/id-service/auth/sign-up
+accept: application/json
+content-type: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+
+{
+  "phone": "{{phone}}",
+  "phoneCountry": "{{phoneCountry}}",
+  "capchaToken": ""
+}
+
+### Exchange OTP for tokens
+POST {{baseUrl}}/id-service/auth/sign-in
+accept: application/json
+content-type: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+
+{
+  "phone": "{{phone}}",
+  "code": "{{otp}}"
+}
+
+### Rotate tokens (do not send access-token)
+POST {{baseUrl}}/id-service/auth/refresh-token
+accept: application/json
+content-type: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+
+{
+  "refreshToken": "{{refreshToken}}"
+}
+
+### Current user
+GET {{baseUrl}}/id-service/user
+accept: application/json
+content-type: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+access-token: {{accessToken}}
+
+### Organizations (may be empty)
+GET {{baseUrl}}/id-service/org/my
+accept: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+access-token: {{accessToken}}
+
+### Search vehicles
+POST {{baseUrl}}/car-service/car/v2/search
+accept: application/json
+content-type: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+access-token: {{accessToken}}
+
+{
+  "limit": 20,
+  "offset": 0,
+  "filters": []
+}
+
+### Vehicle card (mongo _id)
+GET {{baseUrl}}/car-service/car/v2/{{carId}}
+accept: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+access-token: {{accessToken}}
+
+### Telemetry (IMEI, not carId)
+GET {{baseUrl}}/client-bff-service/telemetry/{{imei}}
+accept: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+access-token: {{accessToken}}
+
+### Current charge session (404 if not charging)
+GET {{baseUrl}}/charge-service/session/v2/current
+accept: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+access-token: {{accessToken}}
+
+### Trip filters
+GET {{baseUrl}}/car-service/travels/filters
+accept: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+access-token: {{accessToken}}
+
+### Search trips (DATE/DESC required; startDate/desc is 400)
+POST {{baseUrl}}/car-service/travels/search/{{carId}}
+accept: application/json
+content-type: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+access-token: {{accessToken}}
+
+{
+  "sort": { "by": "DATE", "dir": "DESC" },
+  "filters": [],
+  "limit": 5,
+  "offset": 0
+}
+
+### Trip details (startTime = segmentStartTime)
+GET {{baseUrl}}/car-service/travels/details/{{carId}}/{{travelId}}?startTime={{startTime}}
+accept: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)
+access-token: {{accessToken}}
+
+### Feature flags (empty query returned 400 live)
+GET {{baseUrl}}/config-service/config/flags
+accept: application/json
+cache-control: no-cache
+x-device: android
+x-app: mobile
+x-app-version: 5.1.22 (740)

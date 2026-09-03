@@ -1,0 +1,26 @@
+meta {
+  name: search trips
+  type: http
+  seq: 12
+}
+post {
+  url: {{baseUrl}}/car-service/travels/search/{{carId}}
+}
+headers {
+  accept: application/json
+  content-type: application/json
+  cache-control: no-cache
+  x-device: android
+  x-app: mobile
+  x-app-version: 5.1.22 (740)
+  access-token: {{accessToken}}
+}
+
+body:json {
+  {
+    "sort": { "by": "DATE", "dir": "DESC" },
+    "filters": [],
+    "limit": 5,
+    "offset": 0
+  }
+}

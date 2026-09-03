@@ -1,0 +1,6 @@
+captures/*
+!captures/.gitkeep
+.env
+*.har
+*.pem
+credentials.json

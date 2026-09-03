@@ -33,6 +33,10 @@ Entry points after install:
 - `evaconnect-poller` — write telemetry/trips to Postgres for Grafana
 
 Remote poller + Postgres next to an existing Grafana: see [deploy/README.md](deploy/README.md).
+Grafana dashboard JSON: [deploy/grafana/dashboards/evolute.json](deploy/grafana/dashboards/evolute.json)
+(folder **Evolute**, uid `evaconnect-evolute`, timezone `Europe/Moscow`).
+
+Unofficial reverse-engineered HTTP spec (CC0, not vendor docs): [api/README.md](api/README.md).
 
 ## Auth
 
@@ -137,11 +141,31 @@ Default MCP output redacts VIN, IMEI, phone, tokens, and exact coordinates
 
 ## Tests
 
-Mocks only — tests never call production.
+Mocks only — tests never call production. GitHub Actions runs `pytest` and
+Spectral on `api/openapi.yaml`.
 
 ```bash
 pytest
 ```
+
+## Grafana dashboard
+
+Provisioned JSON: [`deploy/grafana/dashboards/evolute.json`](deploy/grafana/dashboards/evolute.json).
+Datasource uid `evaconnect-pg`. Rows:
+
+| Row | Content |
+|---|---|
+| Обзор | Original nine panels: Battery, Remaining range, Temperatures (cabin/outside/battery), 12V, Online, Central lock, Odometer, Poller heartbeat, Recent trips |
+| Сейчас | Ignition, park, charge gun, signal, climate target/fan, last snapshot, command catalog |
+| Зарядка | Charge-gun timeseries |
+| Климат | Coolant, climate target, fan |
+| Кузов | Doors, trunk, headlights from `telemetry.raw` JSONB |
+| Движение | Odometer timeseries, ignition/park/signal |
+| Служебные сенсоры | Fuel % / firmware / settings (often unused on EV) |
+| Поездки | Extra table (`battery_first`/`last`) and distance/consumption chart. Overview trips `title` is MSK from `start_date`/`end_date` |
+| Poller | Cycle duration and errors |
+
+Trip addresses and coordinates are not stored. See [deploy/README.md](deploy/README.md).
 
 ## Spec gaps (explicit parameters, no guessing)
 
@@ -150,9 +174,13 @@ pytest
   (`DURATION` / `DISTANCE` and `ASC` are also valid).
 - `distance` units (m vs km) are unknown — raw `int`, no conversion.
 - Access-token TTL is unknown — one auto-refresh on HTTP 401, no loop.
-- Charge-session body when charging is not fully specified.
+- Charge-session body when charging is not fully specified. See [api/docs/quirks.md](api/docs/quirks.md).
 - `Time-Zone` header is unused (not confirmed).
+
+Full endpoint table and `x-status` markers: [api/README.md](api/README.md).
 
 ## License
 
-MIT
+MIT for the Python client, MCP server, and poller.
+
+The unofficial API description under [`api/`](api/) is [CC0-1.0](api/LICENSE).

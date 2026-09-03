@@ -1,0 +1,1208 @@
+openapi: 3.1.0
+info:
+  title: Evolute companion API (unofficial)
+  summary: Reverse-engineered REST API of https://app.evassist.ru
+  description: |
+    Unofficial, reverse-engineered description of the Evolute companion HTTP API
+    used by the Android app against `https://app.evassist.ru`.
+
+    Not affiliated with Evolute, Motorinvest, or the operators of evassist.ru.
+    Capture source: live calls from the evaconnect client (own account / own
+    vehicle) on 2026-08-30 and 2026-09-02.
+
+    Do not treat this file as a vendor contract. Fields marked `x-status: partial`
+    or `guessed` are incomplete. Vehicle command send is not an HTTP operation
+    in this document; see `docs/quirks.md`.
+  version: 0.1.0
+  license:
+    name: CC0-1.0
+    identifier: CC0-1.0
+  contact:
+    url: https://github.com/ca11mebaraka/evaconnect
+servers:
+  - url: https://app.evassist.ru
+    description: Production companion API (the only host used in captures)
+tags:
+  - name: Auth
+    description: OTP login, token refresh, unauthenticated bootstrap
+  - name: Account
+    description: Current user and organizations
+  - name: Vehicles
+    description: Vehicle list and card. Mongo `_id` vs telemetry IMEI.
+  - name: Telemetry
+    description: Live sensors and charge session
+  - name: Trips
+    description: Trip list, filters, details including track points
+  - name: Config
+    description: Feature flags (success body not captured)
+
+security:
+  - accessToken: []
+
+paths:
+  /id-service/info:
+    get:
+      operationId: getInfo
+      summary: Service bootstrap
+      tags: [Auth]
+      security: []
+      x-status: verified
+      x-discovered: "2026-08-30"
+      x-source: Live GET via EvoluteClient; full body recaptured 2026-09-02
+      x-notes: >
+        Field name is `capcha` (API spelling), not captcha. No access-token.
+      responses:
+        "200":
+          description: Service flags and store min versions
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ServiceInfo"
+              example:
+                capcha: false
+                enableChat: true
+                yandexApiKey: "00000000-0000-0000-0000-000000000000"
+                ios:
+                  minRequiredVersion: "4.1.6"
+                android:
+                  minRequiredVersion: "4.1.6"
+
+  /id-service/auth/sign-up:
+    post:
+      operationId: requestOtp
+      summary: Request SMS OTP
+      tags: [Auth]
+      security: []
+      x-status: partial
+      x-discovered: "2026-08-30"
+      x-source: Live POST; SMS arrived. HTTP status and body not recorded (client ignores both).
+      x-notes: >
+        One SMS per call. Empty `capchaToken` was accepted while `capcha` was false.
+        Phone and `phoneCountry` wire formats are caller-supplied strings; canonical
+        format not established. Unit tests mock HTTP 201; that code is not live-confirmed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignUpRequest"
+            example:
+              phone: "00000000000"
+              phoneCountry: "XX"
+              capchaToken: ""
+      responses:
+        "200":
+          description: Observed class of success. Exact status not recorded live.
+        "201":
+          description: Status used in client unit-test mocks only. Not live-confirmed.
+
+  /id-service/auth/sign-in:
+    post:
+      operationId: signIn
+      summary: Exchange OTP for tokens
+      tags: [Auth]
+      security: []
+      x-status: verified
+      x-discovered: "2026-08-30"
+      x-source: Live POST; tokens persisted to credentials.json
+      x-notes: Refresh token later rotates on `/id-service/auth/refresh-token`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SignInRequest"
+            example:
+              phone: "00000000000"
+              code: "000000"
+      responses:
+        "200":
+          description: Token pair and user id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthTokens"
+              example:
+                userId: bbbbbbbbbbbbbbbbbbbbbbbb
+                accessToken: <YOUR_TOKEN>
+                refreshToken: <YOUR_REFRESH_TOKEN>
+                userToken: <YOUR_USER_TOKEN>
+                widgetId: widget-example
+
+  /id-service/auth/refresh-token:
+    post:
+      operationId: refreshToken
+      summary: Rotate access and refresh tokens
+      tags: [Auth]
+      security: []
+      x-status: verified
+      x-discovered: "2026-08-30"
+      x-source: Live POST; subsequent 401 on stale refresh
+      x-notes: >
+        Request must not send `access-token` (client strips it). Response includes a
+        new `refreshToken`; the previous refresh token is invalid after success.
+        HTTP 401 means the stored refresh token is dead.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshRequest"
+            example:
+              refreshToken: <YOUR_REFRESH_TOKEN>
+      responses:
+        "200":
+          description: Rotated token pair
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthTokens"
+              example:
+                userId: bbbbbbbbbbbbbbbbbbbbbbbb
+                accessToken: <YOUR_TOKEN>
+                refreshToken: <YOUR_REFRESH_TOKEN>
+                userToken: <YOUR_USER_TOKEN>
+                widgetId: widget-example
+        "401":
+          description: Refresh token rejected. Response body not captured live.
+
+  /id-service/user:
+    get:
+      operationId: getUser
+      summary: Current user
+      tags: [Account]
+      x-status: verified
+      x-discovered: "2026-08-30"
+      x-source: Live GET 2026-08-30; extra ACL map recaptured 2026-09-02
+      x-notes: >
+        Extra keys observed live: `isMaintenanceVisible`, `isGracePeriodVisible`,
+        `buttons` (object of ~32 boolean ACL flags, not the telemetry command list).
+      responses:
+        "200":
+          description: User document
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+              example:
+                _id: bbbbbbbbbbbbbbbbbbbbbbbb
+                phone: "00000000000"
+                userGroupsIds: []
+                pushTokens: []
+                isMaintenanceVisible: true
+                isGracePeriodVisible: true
+                buttons:
+                  travelsVisible: true
+                  addCar: false
+                  isSuperAdmin: false
+        "401":
+          description: Access token rejected. Body not captured live.
+
+  /id-service/org/my:
+    get:
+      operationId: listMyOrgs
+      summary: Organizations for the current user
+      tags: [Account]
+      x-status: verified
+      x-discovered: "2026-09-02"
+      x-source: Live GET; empty list on a private-owner account
+      x-notes: Row item schema unknown (`rows` was empty). `headers` captured.
+      responses:
+        "200":
+          description: Paged org table
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OrgPage"
+              example:
+                rows: []
+                total: 0
+                headers:
+                  - title: Organization
+                    type: string
+                    valueKey: name
+                    width: "2"
+        "401":
+          description: Access token rejected. Body not captured live.
+
+  /car-service/car/v2/search:
+    post:
+      operationId: searchVehicles
+      summary: Search vehicles
+      tags: [Vehicles]
+      x-status: verified
+      x-discovered: "2026-08-30"
+      x-source: Live POST 2026-08-30; headers and extras recaptured 2026-09-02
+      x-notes: >
+        Client always sends `filters: []`. Filter item shape not captured.
+        On 2026-09-02 search returned `imei: null` for the same car that
+        `GET /car-service/car/v2/{carId}` returned with an IMEI.
+        Extra page keys observed: `headers`, `sorting`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VehicleSearchRequest"
+            example:
+              limit: 20
+              offset: 0
+              filters: []
+      responses:
+        "200":
+          description: Vehicle page
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VehiclePage"
+              example:
+                total: 1
+                offset: 0
+                limit: 20
+                sorting: {}
+                rows:
+                  - _id: aaaaaaaaaaaaaaaaaaaaaaaa
+                    vin: TESTVIN0000000001
+                    imei: null
+                    licensePlate: "X000XX000"
+                    brand: evolute
+                    carModel:
+                      name: i-SPACE
+                      modname: F515L2_5_new_wire
+                      modelYear: 2026
+                      color: Example color
+                      options:
+                        heater: false
+                        readyMode: false
+                        hiddenKey: false
+                        canDisableLocation: true
+                        mim: false
+                    locationStatus: true
+                    availableScriptTime: [5, 15, 30, 60, 90, 120]
+                    currentScriptTime: 120
+        "401":
+          description: Access token rejected. Body not captured live.
+
+  /car-service/car/v2/{carId}:
+    get:
+      operationId: getVehicle
+      summary: Vehicle card by mongo id
+      tags: [Vehicles]
+      x-status: verified
+      x-discovered: "2026-08-30"
+      x-source: Live GET; extra keys recaptured 2026-09-02
+      x-notes: >
+        Path id is mongo `_id` (24 hex), not IMEI. GET included `imei` when
+        search on the same day returned null. Extra keys observed: `editable`,
+        `liveSensors`, `images`, `saleDate`, `saleMileageKm`, SIM/dealer/OTA
+        fields, `ownerId`, `tBoxSettingsId`, timestamps, `__v`.
+      parameters:
+        - $ref: "#/components/parameters/CarId"
+      responses:
+        "200":
+          description: Vehicle document
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Vehicle"
+              example:
+                _id: aaaaaaaaaaaaaaaaaaaaaaaa
+                vin: TESTVIN0000000001
+                imei: "000000000000000"
+                licensePlate: "X000XX000"
+                brand: evolute
+                carModel:
+                  name: i-SPACE
+                  options:
+                    heater: false
+                    readyMode: false
+                    hiddenKey: false
+                    canDisableLocation: true
+                    mim: false
+                locationStatus: true
+                availableScriptTime: [5, 15, 30, 60, 90, 120]
+                currentScriptTime: 120
+                liveSensors:
+                  odometer: 1491
+                editable: true
+        "401":
+          description: Access token rejected. Body not captured live.
+
+  /client-bff-service/telemetry/{imei}:
+    get:
+      operationId: getTelemetry
+      summary: Telemetry snapshot by IMEI
+      tags: [Telemetry]
+      x-status: verified
+      x-discovered: "2026-08-30"
+      x-source: Live GET while online (2026-08-30) and offline notFound (2026-09-02)
+      x-notes: >
+        Path is IMEI, not mongo `_id`. Passing a 24-hex car id does not work
+        without a prior vehicle lookup. Sensors often arrive as strings
+        (`"64"`, `"false"`). When `onlineState` is `notFound`, sensor values
+        were boolean `false`. `buttons` is a command catalog; sending those
+        names over HTTP was not observed.
+      parameters:
+        - $ref: "#/components/parameters/Imei"
+      responses:
+        "200":
+          description: Sensors, online flag, command catalog
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Telemetry"
+              examples:
+                online:
+                  summary: Online vehicle (values from 2026-08-30, identifiers stripped)
+                  value:
+                    isOnline: true
+                    onlineState: connected
+                    isCarStateReady: true
+                    carStateUpdatedAt: 1700000000000
+                    sensors:
+                      batteryPercentage: "53"
+                      remainsBatteryMileage: "72"
+                      outsideTemp: "21"
+                      isCentralLockingOn: "true"
+                      isIgnitionOn: "false"
+                      odometer: "1491"
+                    buttons: []
+                    automations: []
+                    warnings: []
+                    firmwareCheck: null
+                    settingsCheck: null
+                offline:
+                  summary: t-box notFound (2026-09-02)
+                  value:
+                    isOnline: false
+                    onlineState: notFound
+                    isCarStateReady: false
+                    carStateUpdatedAt: null
+                    sensors:
+                      batteryPercentage: false
+                      firmwareVersion: false
+                    buttons: []
+                    automations: []
+                    warnings: []
+                    firmwareCheck: null
+                    settingsCheck: null
+        "401":
+          description: Access token rejected. One retry after refresh is how the client recovers.
+
+  /charge-service/session/v2/current:
+    get:
+      operationId: getCurrentChargeSession
+      summary: Current charge session
+      tags: [Telemetry]
+      x-status: partial
+      x-discovered: "2026-08-30"
+      x-source: Live GET returned HTTP 404 while not charging
+      x-notes: >
+        404 means no current session (not "unknown path"). HTTP 200 body while
+        charging was not captured. Client also treats empty/null 200 as none.
+      responses:
+        "200":
+          description: Session object. Shape not captured live.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChargeSession"
+        "404":
+          description: Not charging / no session. Verified live.
+        "401":
+          description: Access token rejected. Body not captured live.
+
+  /car-service/travels/filters:
+    get:
+      operationId: listTripFilters
+      summary: Trip search filter catalog
+      tags: [Trips]
+      x-status: verified
+      x-discovered: "2026-09-02"
+      x-source: Live GET
+      x-notes: "Client trip search was called with filters: []; applying these keys was not tested."
+      responses:
+        "200":
+          description: Filter descriptors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TripFilter"
+              example:
+                - key: PERIOD
+                  type: MULTISELECT
+                  name: Period
+                  options: [TODAY, YESTERDAY, WEEK, MONTH, YEAR, ALL, CUSTOM]
+                - key: DATE_START
+                  type: TEXT
+                  name: Filter start
+                  options: []
+                - key: DATE_END
+                  type: TEXT
+                  name: Filter end
+                  options: []
+        "401":
+          description: Access token rejected. Body not captured live.
+
+  /car-service/travels/search/{carId}:
+    post:
+      operationId: searchTrips
+      summary: Search trips for a vehicle
+      tags: [Trips]
+      x-status: verified
+      x-discovered: "2026-08-30"
+      x-source: Live POST; invalid sort `startDate`/`desc` returned HTTP 400
+      x-notes: >
+        `sort.by` must be DATE, DURATION, or DISTANCE (not `startDate`).
+        `sort.dir` must be ASC or DESC (not `desc`). `title` is a UTC wall-clock
+        range matching `startDate`/`endDate` milliseconds, not `segmentStartTime`.
+        `distance` is a raw integer; unit (m vs km) unknown. `description` often
+        contains an address.
+      parameters:
+        - $ref: "#/components/parameters/CarId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TripSearchRequest"
+            example:
+              sort:
+                by: DATE
+                dir: DESC
+              filters: []
+              limit: 5
+              offset: 0
+      responses:
+        "200":
+          description: Trip page
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TripPage"
+              example:
+                total: 73
+                offset: 0
+                limit: 5
+                filters: null
+                rows:
+                  - id: 84
+                    segmentStartTime: 1700000000
+                    segmentEndTime: 1700001800
+                    startDate: 1700000445000
+                    endDate: 1700001800000
+                    title: "08:38 - 09:00"
+                    description: "<redacted address>"
+                    duration: "00:22:08"
+                    distance: 3
+                    batteryConsumption: -3
+                    odometer:
+                      first: 1488
+                      last: 1491
+                    battery:
+                      first: 56
+                      last: 53
+                    fuel:
+                      first: 100
+                      last: 100
+        "400":
+          description: Invalid sort. Verified for `by=startDate` / `dir=desc`.
+        "401":
+          description: Access token rejected. Body not captured live.
+
+  /car-service/travels/details/{carId}/{travelId}:
+    get:
+      operationId: getTripDetails
+      summary: One trip including track
+      tags: [Trips]
+      x-status: verified
+      x-discovered: "2026-08-30"
+      x-source: Live GET 2026-08-30; field set recaptured 2026-09-02
+      x-notes: >
+        Query `startTime` must be that trip's `segmentStartTime` (unix seconds).
+        Details omitted `title`, `startDate`, `endDate`, `batteryConsumption`
+        (those exist on search). `startAddr`/`endAddr` were empty strings in the
+        2026-09-02 capture. `points[].time` was unix milliseconds.
+      parameters:
+        - $ref: "#/components/parameters/CarId"
+        - name: travelId
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Trip `id` from search (integer, not mongo id)
+        - name: startTime
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Same value as `segmentStartTime` for this trip
+      responses:
+        "200":
+          description: Trip plus track points
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TripDetails"
+              example:
+                id: 84
+                segmentStartTime: 1700000000
+                segmentEndTime: 1700001800
+                startDate: null
+                endDate: null
+                title: null
+                description: null
+                duration: "00:22:08"
+                distance: 3
+                batteryConsumption: null
+                odometer:
+                  first: 1488
+                  last: 1491
+                battery:
+                  first: 56
+                  last: 53
+                fuel:
+                  first: 100
+                  last: 100
+                startAddr: ""
+                endAddr: ""
+                pointsTotal: 299
+                points:
+                  - lat: 0.0
+                    lon: 0.0
+                    time: 1700000445000
+        "401":
+          description: Access token rejected. Body not captured live.
+
+  /config-service/config/flags:
+    get:
+      operationId: getFeatureFlags
+      summary: Feature flags
+      tags: [Config]
+      security: []
+      x-status: partial
+      x-discovered: "2026-09-02"
+      x-source: Live GET with empty query returned HTTP 400. Client omits access-token.
+      x-notes: >
+        Successful body not captured. Query names below are what the client sends,
+        not a live-confirmed required set.
+      parameters:
+        - name: brand
+          in: query
+          schema:
+            type: string
+        - name: modification
+          in: query
+          schema:
+            type: string
+        - name: userId
+          in: query
+          schema:
+            type: string
+        - name: vin
+          in: query
+          schema:
+            type: string
+      responses:
+        "400":
+          description: Verified for a call with empty query parameters.
+        "200":
+          description: Not captured live. Client model expects an object, optionally with `flags`.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FeatureFlags"
+
+components:
+  securitySchemes:
+    accessToken:
+      type: apiKey
+      in: header
+      name: access-token
+      description: |
+        Opaque session token from sign-in or refresh. Not `Authorization: Bearer`.
+        TTL not measured. HTTP 401 on a data request is recovered by the official
+        flow via `POST /id-service/auth/refresh-token`.
+
+  parameters:
+    CarId:
+      name: carId
+      in: path
+      required: true
+      description: Mongo vehicle `_id`, 24 hex characters. Not IMEI.
+      schema:
+        $ref: "#/components/schemas/MongoId"
+    Imei:
+      name: imei
+      in: path
+      required: true
+      description: Telemetry identifier from the vehicle card. Not mongo `_id`.
+      schema:
+        type: string
+        examples: ["000000000000000"]
+
+  schemas:
+    MongoId:
+      type: string
+      pattern: "^[0-9a-fA-F]{24}$"
+      examples: ["aaaaaaaaaaaaaaaaaaaaaaaa"]
+
+    SensorValue:
+      description: Live sensors arrive as strings, numbers, or booleans (false when offline).
+      type: [string, number, boolean, "null"]
+
+    FirstLast:
+      type: object
+      additionalProperties: true
+      properties:
+        first:
+          type: [integer, "null"]
+        last:
+          type: [integer, "null"]
+
+    SignUpRequest:
+      type: object
+      additionalProperties: true
+      required: [phone, phoneCountry, capchaToken]
+      properties:
+        phone:
+          type: string
+        phoneCountry:
+          type: string
+        capchaToken:
+          type: string
+          description: API spelling. Empty string accepted while info.capcha is false.
+
+    SignInRequest:
+      type: object
+      additionalProperties: true
+      required: [phone, code]
+      properties:
+        phone:
+          type: string
+        code:
+          type: string
+          description: SMS OTP. Length not documented by vendor; 6 digits used in the live login.
+
+    RefreshRequest:
+      type: object
+      additionalProperties: true
+      required: [refreshToken]
+      properties:
+        refreshToken:
+          type: string
+
+    AuthTokens:
+      type: object
+      additionalProperties: true
+      properties:
+        userId:
+          type: string
+        accessToken:
+          type: string
+        refreshToken:
+          type: string
+        userToken:
+          type: string
+        widgetId:
+          type: string
+
+    MinVersion:
+      type: object
+      additionalProperties: true
+      properties:
+        minRequiredVersion:
+          type: string
+          examples: ["4.1.6"]
+
+    ServiceInfo:
+      type: object
+      additionalProperties: true
+      properties:
+        capcha:
+          type: boolean
+          description: API spelling, not captcha
+        enableChat:
+          type: boolean
+        yandexApiKey:
+          type: string
+        ios:
+          $ref: "#/components/schemas/MinVersion"
+        android:
+          $ref: "#/components/schemas/MinVersion"
+
+    UserAclButtons:
+      type: object
+      additionalProperties:
+        type: boolean
+      description: Boolean ACL map on the user document. Distinct from telemetry `buttons`.
+      properties:
+        travelsVisible:
+          type: boolean
+        addCar:
+          type: boolean
+        isSuperAdmin:
+          type: boolean
+        isTopManagement:
+          type: boolean
+        isTestingEngineer:
+          type: boolean
+
+    User:
+      type: object
+      additionalProperties: true
+      properties:
+        _id:
+          type: string
+        phone:
+          type: string
+        userGroupsIds:
+          type: array
+          items: true
+        pushTokens:
+          type: array
+          items: true
+        isMaintenanceVisible:
+          type: boolean
+        isGracePeriodVisible:
+          type: boolean
+        buttons:
+          $ref: "#/components/schemas/UserAclButtons"
+
+    TableHeader:
+      type: object
+      additionalProperties: true
+      properties:
+        title:
+          type: string
+        type:
+          type: string
+        valueKey:
+          type: string
+        width:
+          type: string
+
+    OrgPage:
+      type: object
+      additionalProperties: true
+      properties:
+        rows:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        total:
+          type: integer
+        headers:
+          type: array
+          items:
+            $ref: "#/components/schemas/TableHeader"
+
+    CarModelOptions:
+      type: object
+      additionalProperties: true
+      properties:
+        heater:
+          type: boolean
+        readyMode:
+          type: boolean
+        hiddenKey:
+          type: boolean
+        canDisableLocation:
+          type: boolean
+        mim:
+          type: boolean
+
+    CarModel:
+      type: object
+      additionalProperties: true
+      properties:
+        name:
+          type: string
+        modname:
+          type: string
+        modelYear:
+          type: integer
+        color:
+          type: string
+        options:
+          $ref: "#/components/schemas/CarModelOptions"
+
+    VehicleSearchRequest:
+      type: object
+      additionalProperties: true
+      properties:
+        limit:
+          type: integer
+        offset:
+          type: integer
+        filters:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+          description: Empty array verified. Item schema not captured.
+
+    Vehicle:
+      type: object
+      additionalProperties: true
+      required: [_id]
+      properties:
+        _id:
+          $ref: "#/components/schemas/MongoId"
+        vin:
+          type: [string, "null"]
+        imei:
+          type: [string, "null"]
+        licensePlate:
+          type: [string, "null"]
+        brand:
+          type: string
+        carModel:
+          $ref: "#/components/schemas/CarModel"
+        options:
+          $ref: "#/components/schemas/CarModelOptions"
+        locationStatus:
+          type: [boolean, "null"]
+        availableScriptTime:
+          type: array
+          items:
+            type: integer
+        currentScriptTime:
+          type: integer
+        liveSensors:
+          type: object
+          additionalProperties: true
+        images:
+          type: object
+          additionalProperties: true
+        editable:
+          type: boolean
+        saleDate:
+          type: string
+        saleMileageKm:
+          type: integer
+        travelsHistoryResetAt:
+          type: string
+        lastSensorRequest:
+          type: string
+        lastSensorsRecieved:
+          type: string
+          description: API spelling (Recieved)
+        lastCommandTrigger:
+          type: string
+        currentConfigurationName:
+          type: [string, "null"]
+        updateAvailable:
+          type: boolean
+        simGraceEligible:
+          type: boolean
+        isPakConnected:
+          type: boolean
+        imsiSim:
+          type: [string, "null"]
+        regIccNumber:
+          type: [string, "null"]
+        driversIds:
+          type: array
+          items: true
+        blockedDrivers:
+          type: array
+          items: true
+        driverTripsAccess:
+          type: array
+          items: true
+        favoriteDealers:
+          type: array
+          items: true
+        ownerId:
+          type: string
+        tBoxSettingsId:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        __v:
+          type: integer
+
+    VehiclePage:
+      type: object
+      additionalProperties: true
+      properties:
+        rows:
+          type: array
+          items:
+            $ref: "#/components/schemas/Vehicle"
+        total:
+          type: integer
+        offset:
+          type: integer
+        limit:
+          type: integer
+        headers:
+          type: array
+          items:
+            $ref: "#/components/schemas/TableHeader"
+        sorting:
+          type: object
+          additionalProperties: true
+
+    TelemetryButton:
+      type: object
+      additionalProperties: true
+      description: Command catalog entry. Not a send API.
+      properties:
+        title:
+          type: string
+        status:
+          type: [boolean, string, "null"]
+        enabled:
+          type: boolean
+        activateCommand:
+          type: string
+        deactivateCommand:
+          type: string
+        runOnSchedule:
+          type: boolean
+        tag:
+          type: [string, "null"]
+        activeStatusText:
+          type: string
+        deactivatedStatusText:
+          type: string
+        iconActivated:
+          type: string
+        iconDeactivated:
+          type: string
+
+    TelemetrySensors:
+      type: object
+      additionalProperties:
+        $ref: "#/components/schemas/SensorValue"
+      description: Keys observed 2026-09-02 on i-SPACE. Not a closed set.
+      properties:
+        batteryPercentage:
+          $ref: "#/components/schemas/SensorValue"
+        remainsBatteryMileage:
+          $ref: "#/components/schemas/SensorValue"
+        batteryTemp:
+          $ref: "#/components/schemas/SensorValue"
+        "12VBatteryVoltage":
+          $ref: "#/components/schemas/SensorValue"
+        isChargingGunInserted:
+          $ref: "#/components/schemas/SensorValue"
+        climateTargetTemp:
+          $ref: "#/components/schemas/SensorValue"
+        climateFanSpeed:
+          $ref: "#/components/schemas/SensorValue"
+        inBoardTemp:
+          $ref: "#/components/schemas/SensorValue"
+        outsideTemp:
+          $ref: "#/components/schemas/SensorValue"
+        coolantTemp:
+          $ref: "#/components/schemas/SensorValue"
+        isCentralLockingOn:
+          $ref: "#/components/schemas/SensorValue"
+        doorFLStatus:
+          $ref: "#/components/schemas/SensorValue"
+        doorFRStatus:
+          $ref: "#/components/schemas/SensorValue"
+        doorRLStatus:
+          $ref: "#/components/schemas/SensorValue"
+        doorRRStatus:
+          $ref: "#/components/schemas/SensorValue"
+        trunkStatus:
+          $ref: "#/components/schemas/SensorValue"
+        headLightsStatus:
+          $ref: "#/components/schemas/SensorValue"
+        isIgnitionOn:
+          $ref: "#/components/schemas/SensorValue"
+        isParkedOn:
+          $ref: "#/components/schemas/SensorValue"
+        odometer:
+          $ref: "#/components/schemas/SensorValue"
+        signalLevel:
+          $ref: "#/components/schemas/SensorValue"
+        lat:
+          $ref: "#/components/schemas/SensorValue"
+        lon:
+          $ref: "#/components/schemas/SensorValue"
+        course:
+          $ref: "#/components/schemas/SensorValue"
+        firmwareVersion:
+          $ref: "#/components/schemas/SensorValue"
+        settingsVersion:
+          $ref: "#/components/schemas/SensorValue"
+        fuelPercentage:
+          $ref: "#/components/schemas/SensorValue"
+        remainsFuelMileage:
+          $ref: "#/components/schemas/SensorValue"
+        isOnline:
+          $ref: "#/components/schemas/SensorValue"
+
+    Telemetry:
+      type: object
+      additionalProperties: true
+      properties:
+        isOnline:
+          type: boolean
+        onlineState:
+          type: string
+          examples: [connected, notFound]
+        isCarStateReady:
+          type: boolean
+        carStateUpdatedAt:
+          type: [integer, "null"]
+        sensors:
+          $ref: "#/components/schemas/TelemetrySensors"
+        buttons:
+          type: array
+          items:
+            $ref: "#/components/schemas/TelemetryButton"
+        automations:
+          type: array
+          items: true
+        warnings:
+          type: array
+          items: true
+        firmwareCheck: {}
+        settingsCheck: {}
+
+    ChargeSession:
+      type: object
+      additionalProperties: true
+      description: Non-empty 200 body not captured live.
+
+    TripSort:
+      type: object
+      additionalProperties: true
+      required: [by, dir]
+      properties:
+        by:
+          type: string
+          enum: [DATE, DURATION, DISTANCE]
+        dir:
+          type: string
+          enum: [ASC, DESC]
+
+    TripSearchRequest:
+      type: object
+      additionalProperties: true
+      properties:
+        sort:
+          $ref: "#/components/schemas/TripSort"
+        filters:
+          type: array
+          items:
+            type: object
+            additionalProperties: true
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    TripFilter:
+      type: object
+      additionalProperties: true
+      properties:
+        key:
+          type: string
+        type:
+          type: string
+        name:
+          type: string
+        options:
+          type: array
+          items: true
+
+    TripSummary:
+      type: object
+      additionalProperties: true
+      required: [id]
+      properties:
+        id:
+          type: integer
+        segmentStartTime:
+          type: integer
+          description: Unix seconds. Required as startTime on details.
+        segmentEndTime:
+          type: integer
+        startDate:
+          type: [integer, "null"]
+          description: Unix milliseconds. Aligns with `title` UTC clock.
+        endDate:
+          type: [integer, "null"]
+        title:
+          type: [string, "null"]
+        description:
+          type: [string, "null"]
+        duration:
+          type: string
+        distance:
+          type: integer
+          description: Raw integer. Unit not established.
+        batteryConsumption:
+          type: [integer, "null"]
+        odometer:
+          $ref: "#/components/schemas/FirstLast"
+        battery:
+          $ref: "#/components/schemas/FirstLast"
+        fuel:
+          $ref: "#/components/schemas/FirstLast"
+
+    TripPage:
+      type: object
+      additionalProperties: true
+      properties:
+        rows:
+          type: array
+          items:
+            $ref: "#/components/schemas/TripSummary"
+        total:
+          type: integer
+        offset:
+          type: integer
+        limit:
+          type: integer
+        filters: {}
+
+    TripPoint:
+      type: object
+      additionalProperties: true
+      properties:
+        lat:
+          type: number
+        lon:
+          type: number
+        time:
+          description: Unix milliseconds in the 2026-09-02 capture
+          type: [integer, string]
+
+    TripDetails:
+      allOf:
+        - $ref: "#/components/schemas/TripSummary"
+        - type: object
+          additionalProperties: true
+          properties:
+            startAddr:
+              type: string
+            endAddr:
+              type: string
+            pointsTotal:
+              type: integer
+            points:
+              type: array
+              items:
+                $ref: "#/components/schemas/TripPoint"
+
+    FeatureFlags:
+      type: object
+      additionalProperties: true
+      description: Success body not captured live.
+      properties:
+        flags:
+          type: object
+          additionalProperties: true

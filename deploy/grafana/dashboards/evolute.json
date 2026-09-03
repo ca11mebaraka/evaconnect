@@ -1,5 +1,7 @@
 {
-  "annotations": { "list": [] },
+  "annotations": {
+    "list": []
+  },
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
@@ -7,21 +9,54 @@
   "links": [],
   "panels": [
     {
-      "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+      "collapsed": false,
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "panels": [],
+      "title": "Обзор",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
       "fieldConfig": {
         "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
           "unit": "percent",
           "min": 0,
-          "max": 100,
-          "custom": { "drawStyle": "line", "lineWidth": 2, "fillOpacity": 10, "spanNulls": false }
+          "max": 100
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
-      "id": 1,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 1
+      },
+      "id": 2,
       "targets": [
         {
-          "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
@@ -33,19 +68,35 @@
       "type": "timeseries"
     },
     {
-      "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
       "fieldConfig": {
         "defaults": {
-          "unit": "lengthkm",
-          "custom": { "drawStyle": "line", "lineWidth": 2, "fillOpacity": 10, "spanNulls": false }
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
+          "unit": "lengthkm"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
-      "id": 2,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 1
+      },
+      "id": 3,
       "targets": [
         {
-          "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
@@ -57,19 +108,35 @@
       "type": "timeseries"
     },
     {
-      "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
       "fieldConfig": {
         "defaults": {
-          "unit": "celsius",
-          "custom": { "drawStyle": "line", "lineWidth": 2, "fillOpacity": 8, "spanNulls": false }
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
+          "unit": "celsius"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
-      "id": 3,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 9
+      },
+      "id": 4,
       "targets": [
         {
-          "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
@@ -81,19 +148,35 @@
       "type": "timeseries"
     },
     {
-      "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
       "fieldConfig": {
         "defaults": {
-          "unit": "volt",
-          "custom": { "drawStyle": "line", "lineWidth": 2, "fillOpacity": 10, "spanNulls": false }
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
+          "unit": "volt"
         },
         "overrides": []
       },
-      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
-      "id": 4,
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 9
+      },
+      "id": 5,
       "targets": [
         {
-          "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
           "editorMode": "code",
           "format": "time_series",
           "rawQuery": true,
@@ -105,14 +188,67 @@
       "type": "timeseries"
     },
     {
-      "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
-      "fieldConfig": { "defaults": { "mappings": [], "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] } }, "overrides": [] },
-      "gridPos": { "h": 4, "w": 6, "x": 0, "y": 16 },
-      "id": 5,
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "background", "graphMode": "none" },
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "offline",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "online",
+                  "color": "green"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 17
+      },
+      "id": 6,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
       "targets": [
         {
-          "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
@@ -124,14 +260,67 @@
       "type": "stat"
     },
     {
-      "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
-      "fieldConfig": { "defaults": { "mappings": [{ "options": { "0": { "text": "open" }, "1": { "text": "locked" } }, "type": "value" }], "thresholds": { "mode": "absolute", "steps": [{ "color": "orange", "value": null }, { "color": "green", "value": 1 }] } }, "overrides": [] },
-      "gridPos": { "h": 4, "w": 6, "x": 6, "y": 16 },
-      "id": 6,
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "background", "graphMode": "none" },
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "open",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "locked",
+                  "color": "green"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 17
+      },
+      "id": 7,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
       "targets": [
         {
-          "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
@@ -143,14 +332,50 @@
       "type": "stat"
     },
     {
-      "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
-      "fieldConfig": { "defaults": { "unit": "none", "decimals": 0 }, "overrides": [] },
-      "gridPos": { "h": 4, "w": 6, "x": 12, "y": 16 },
-      "id": 7,
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "none", "graphMode": "none" },
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 17
+      },
+      "id": 8,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "none",
+        "graphMode": "none"
+      },
       "targets": [
         {
-          "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
@@ -162,14 +387,67 @@
       "type": "stat"
     },
     {
-      "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
-      "fieldConfig": { "defaults": { "mappings": [{ "options": { "0": { "text": "down" }, "1": { "text": "ok" } }, "type": "value" }], "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "green", "value": 1 }] } }, "overrides": [] },
-      "gridPos": { "h": 4, "w": 6, "x": 18, "y": 16 },
-      "id": 8,
-      "options": { "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false }, "colorMode": "background", "graphMode": "none" },
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "down",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "ok",
+                  "color": "green"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 17
+      },
+      "id": 9,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
       "targets": [
         {
-          "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
@@ -181,33 +459,1732 @@
       "type": "stat"
     },
     {
-      "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
-      "fieldConfig": { "defaults": {}, "overrides": [] },
-      "gridPos": { "h": 8, "w": 24, "x": 0, "y": 20 },
-      "id": 9,
-      "options": { "showHeader": true, "cellHeight": "sm" },
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 10,
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
       "targets": [
         {
-          "datasource": { "type": "postgres", "uid": "evaconnect-pg" },
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
           "editorMode": "code",
           "format": "table",
           "rawQuery": true,
-          "rawSql": "SELECT to_timestamp(segment_start_time) AS started, title, duration, distance, battery_consumption, odo_first, odo_last FROM trips ORDER BY segment_start_time DESC LIMIT 20",
+          "rawSql": "SELECT\n  to_timestamp(start_date / 1000.0) AS started,\n  to_char(timezone('Europe/Moscow', to_timestamp(start_date / 1000.0)), 'HH24:MI')\n    || ' - ' ||\n  to_char(timezone('Europe/Moscow', to_timestamp(end_date / 1000.0)), 'HH24:MI') AS title,\n  duration, distance, battery_consumption, odo_first, odo_last\nFROM trips\nORDER BY segment_start_time DESC\nLIMIT 20",
           "refId": "A"
         }
       ],
       "title": "Recent trips (no addresses)",
       "type": "table"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 29
+      },
+      "id": 11,
+      "panels": [],
+      "title": "Сейчас",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "выкл",
+                  "color": "text"
+                },
+                "1": {
+                  "text": "вкл",
+                  "color": "green"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 30
+      },
+      "id": 12,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN ignition THEN 1 ELSE 0 END AS value FROM telemetry WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Зажигание",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "езда",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "паркинг",
+                  "color": "green"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 30
+      },
+      "id": 13,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN parked THEN 1 ELSE 0 END AS value FROM telemetry WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Паркинг",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "не вставлен",
+                  "color": "text"
+                },
+                "1": {
+                  "text": "вставлен",
+                  "color": "green"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 30
+      },
+      "id": 14,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN charging_gun THEN 1 ELSE 0 END AS value FROM telemetry WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Пистолет зарядки",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 30
+      },
+      "id": 15,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "none",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, signal_level AS \"value\" FROM telemetry WHERE $__timeFilter(ts) AND signal_level IS NOT NULL ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Сигнал",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "celsius",
+          "decimals": 1
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 30
+      },
+      "id": 16,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "none",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, climate_target AS \"value\" FROM telemetry WHERE $__timeFilter(ts) AND climate_target IS NOT NULL ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Цель климата",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 30
+      },
+      "id": 17,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "none",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, climate_fan AS \"value\" FROM telemetry WHERE $__timeFilter(ts) AND climate_fan IS NOT NULL ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Вентилятор",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 34
+      },
+      "id": 18,
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts,\n  online, online_state,\n  battery_pct, range_km, charging_gun, battery_temp, voltage_12v,\n  climate_target, climate_fan, temp_inside, temp_outside, coolant_temp,\n  locked, ignition, parked, odometer, signal_level,\n  raw->'sensors'->>'doorFLStatus' AS door_fl,\n  raw->'sensors'->>'doorFRStatus' AS door_fr,\n  raw->'sensors'->>'doorRLStatus' AS door_rl,\n  raw->'sensors'->>'doorRRStatus' AS door_rr,\n  raw->'sensors'->>'trunkStatus' AS trunk,\n  raw->'sensors'->>'headLightsStatus' AS headlights,\n  raw->'sensors'->>'firmwareVersion' AS firmware,\n  raw->'sensors'->>'settingsVersion' AS settings,\n  raw->'sensors'->>'fuelPercentage' AS fuel_pct,\n  raw->'sensors'->>'remainsFuelMileage' AS fuel_range,\n  raw->'status'->'warnings' AS warnings\nFROM telemetry\nORDER BY ts DESC\nLIMIT 1",
+          "refId": "A"
+        }
+      ],
+      "title": "Последний снимок (все поля телеметрии)",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 40
+      },
+      "id": 19,
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT b->>'title' AS title,\n       b->>'status' AS status,\n       b->>'enabled' AS enabled\nFROM telemetry t,\n     jsonb_array_elements(COALESCE(t.raw->'status'->'buttons', '[]'::jsonb)) AS b\nWHERE t.ts = (SELECT max(ts) FROM telemetry)",
+          "refId": "A"
+        }
+      ],
+      "title": "Команды (каталог, только чтение)",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
+          "min": 0,
+          "max": 1
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 40
+      },
+      "id": 20,
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time,\n  CASE WHEN online THEN 1 ELSE 0 END AS \"Online\",\n  CASE WHEN locked THEN 1 ELSE 0 END AS \"Замок\",\n  CASE WHEN ignition THEN 1 ELSE 0 END AS \"Зажигание\",\n  CASE WHEN parked THEN 1 ELSE 0 END AS \"Паркинг\",\n  CASE WHEN charging_gun THEN 1 ELSE 0 END AS \"Пистолет\"\nFROM telemetry\nWHERE $__timeFilter(ts)\nORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Состояния 0/1",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 47
+      },
+      "id": 21,
+      "panels": [],
+      "title": "Зарядка",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
+          "min": 0,
+          "max": 1
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 48
+      },
+      "id": 22,
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN charging_gun THEN 1 ELSE 0 END AS \"Gun\" FROM telemetry WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Пистолет зарядки",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 54
+      },
+      "id": 23,
+      "panels": [],
+      "title": "Климат",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 0,
+        "y": 55
+      },
+      "id": 24,
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time,\n  coolant_temp AS \"ОЖ\",\n  climate_target AS \"Цель климата\"\nFROM telemetry\nWHERE $__timeFilter(ts)\nORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "ОЖ и цель климата",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 55
+      },
+      "id": 25,
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, climate_fan AS \"Fan\" FROM telemetry WHERE $__timeFilter(ts) AND climate_fan IS NOT NULL ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Вентилятор климата",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 63
+      },
+      "id": 26,
+      "panels": [],
+      "title": "Кузов: двери, багажник, свет, замок",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "закрыта",
+                  "color": "green"
+                },
+                "1": {
+                  "text": "открыта",
+                  "color": "orange"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 64
+      },
+      "id": 27,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN raw->'sensors'->>'doorFLStatus' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'doorFLStatus' IN ('false','0','f') THEN 0 ELSE NULL END AS \"value\" FROM telemetry WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Дверь FL",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "закрыта",
+                  "color": "green"
+                },
+                "1": {
+                  "text": "открыта",
+                  "color": "orange"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 64
+      },
+      "id": 28,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN raw->'sensors'->>'doorFRStatus' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'doorFRStatus' IN ('false','0','f') THEN 0 ELSE NULL END AS \"value\" FROM telemetry WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Дверь FR",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "закрыта",
+                  "color": "green"
+                },
+                "1": {
+                  "text": "открыта",
+                  "color": "orange"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 8,
+        "y": 64
+      },
+      "id": 29,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN raw->'sensors'->>'doorRLStatus' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'doorRLStatus' IN ('false','0','f') THEN 0 ELSE NULL END AS \"value\" FROM telemetry WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Дверь RL",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "закрыта",
+                  "color": "green"
+                },
+                "1": {
+                  "text": "открыта",
+                  "color": "orange"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 12,
+        "y": 64
+      },
+      "id": 30,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN raw->'sensors'->>'doorRRStatus' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'doorRRStatus' IN ('false','0','f') THEN 0 ELSE NULL END AS \"value\" FROM telemetry WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Дверь RR",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "закрыт",
+                  "color": "green"
+                },
+                "1": {
+                  "text": "открыт",
+                  "color": "orange"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 16,
+        "y": 64
+      },
+      "id": 31,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN raw->'sensors'->>'trunkStatus' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'trunkStatus' IN ('false','0','f') THEN 0 ELSE NULL END AS \"value\" FROM telemetry WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Багажник",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "выкл",
+                  "color": "text"
+                },
+                "1": {
+                  "text": "вкл",
+                  "color": "yellow"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 20,
+        "y": 64
+      },
+      "id": 32,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "none"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN raw->'sensors'->>'headLightsStatus' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'headLightsStatus' IN ('false','0','f') THEN 0 ELSE NULL END AS \"value\" FROM telemetry WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Фары",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
+          "min": 0,
+          "max": 1
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 68
+      },
+      "id": 33,
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN raw->'sensors'->>'doorFLStatus' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'doorFLStatus' IN ('false','0','f') THEN 0 ELSE NULL END AS \"FL\", CASE WHEN raw->'sensors'->>'doorFRStatus' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'doorFRStatus' IN ('false','0','f') THEN 0 ELSE NULL END AS \"FR\", CASE WHEN raw->'sensors'->>'doorRLStatus' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'doorRLStatus' IN ('false','0','f') THEN 0 ELSE NULL END AS \"RL\", CASE WHEN raw->'sensors'->>'doorRRStatus' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'doorRRStatus' IN ('false','0','f') THEN 0 ELSE NULL END AS \"RR\", CASE WHEN raw->'sensors'->>'trunkStatus' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'trunkStatus' IN ('false','0','f') THEN 0 ELSE NULL END AS \"Багажник\", CASE WHEN raw->'sensors'->>'headLightsStatus' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'headLightsStatus' IN ('false','0','f') THEN 0 ELSE NULL END AS \"Фары\", CASE WHEN raw->'sensors'->>'isCentralLockingOn' IN ('true','1','t') THEN 1 WHEN raw->'sensors'->>'isCentralLockingOn' IN ('false','0','f') THEN 0 ELSE NULL END AS \"Замок\" FROM telemetry WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Кузов во времени (0/1)",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 76
+      },
+      "id": 34,
+      "panels": [],
+      "title": "Движение",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 77
+      },
+      "id": 35,
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, odometer AS \"Odo\" FROM telemetry WHERE $__timeFilter(ts) AND odometer IS NOT NULL ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Одометр (сырое число)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 77
+      },
+      "id": 36,
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time,\n  CASE WHEN ignition THEN 1 ELSE 0 END AS \"Зажигание\",\n  CASE WHEN parked THEN 1 ELSE 0 END AS \"Паркинг\",\n  signal_level AS \"Сигнал\"\nFROM telemetry\nWHERE $__timeFilter(ts)\nORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Зажигание, паркинг, сигнал",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 85
+      },
+      "id": 37,
+      "panels": [],
+      "title": "Служебные сенсоры API (не в колонках)",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 16,
+        "x": 0,
+        "y": 86
+      },
+      "id": 38,
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN raw->'sensors'->>'fuelPercentage' ~ '^-?[0-9]+(\\.[0-9]+)?$' THEN (raw->'sensors'->>'fuelPercentage')::double precision ELSE NULL END AS \"Fuel %\", CASE WHEN raw->'sensors'->>'remainsFuelMileage' ~ '^-?[0-9]+(\\.[0-9]+)?$' THEN (raw->'sensors'->>'remainsFuelMileage')::double precision ELSE NULL END AS \"Fuel range\", CASE WHEN raw->'sensors'->>'firmwareVersion' ~ '^-?[0-9]+(\\.[0-9]+)?$' THEN (raw->'sensors'->>'firmwareVersion')::double precision ELSE NULL END AS \"Firmware\", CASE WHEN raw->'sensors'->>'settingsVersion' ~ '^-?[0-9]+(\\.[0-9]+)?$' THEN (raw->'sensors'->>'settingsVersion')::double precision ELSE NULL END AS \"Settings\" FROM telemetry WHERE $__timeFilter(ts) ORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Топливо / прошивка / settings (как пришло; у EV часто шум)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 8,
+        "x": 16,
+        "y": 86
+      },
+      "id": 39,
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts,\n  raw->'sensors'->>'firmwareVersion' AS firmware,\n  raw->'sensors'->>'settingsVersion' AS settings,\n  raw->'sensors'->>'fuelPercentage' AS fuel_pct,\n  raw->'sensors'->>'remainsFuelMileage' AS fuel_range,\n  raw->'sensors'->>'isOnline' AS sensors_is_online\nFROM telemetry\nWHERE $__timeFilter(ts)\nORDER BY ts DESC\nLIMIT 20",
+          "refId": "A"
+        }
+      ],
+      "title": "Последние raw-значения",
+      "type": "table"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 94
+      },
+      "id": 40,
+      "panels": [],
+      "title": "Поездки",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 24,
+        "x": 0,
+        "y": 95
+      },
+      "id": 41,
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  to_char(timezone('Europe/Moscow', to_timestamp(start_date / 1000.0)), 'YYYY-MM-DD HH24:MI') AS started_msk,\n  to_char(timezone('Europe/Moscow', to_timestamp(start_date / 1000.0)), 'HH24:MI')\n    || ' - ' ||\n  to_char(timezone('Europe/Moscow', to_timestamp(end_date / 1000.0)), 'HH24:MI') AS title_msk,\n  duration,\n  distance,\n  battery_consumption,\n  battery_first,\n  battery_last,\n  odo_first,\n  odo_last,\n  travel_id\nFROM trips\nORDER BY start_date DESC NULLS LAST, segment_start_time DESC\nLIMIT 50",
+          "refId": "A"
+        }
+      ],
+      "title": "Последние поездки (MSK, без адресов)",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 105
+      },
+      "id": 42,
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT to_timestamp(start_date / 1000.0) AS time,\n  distance AS \"Distance\",\n  battery_consumption AS \"Battery Δ\",\n  (battery_first - battery_last) AS \"Battery first-last\"\nFROM trips\nWHERE start_date IS NOT NULL\n  AND to_timestamp(start_date / 1000.0) BETWEEN $__timeFrom()::timestamptz AND $__timeTo()::timestamptz\nORDER BY start_date",
+          "refId": "A"
+        }
+      ],
+      "title": "Дистанция и расход батареи по поездкам",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 113
+      },
+      "id": 43,
+      "panels": [],
+      "title": "Poller",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "ошибка",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "ok",
+                  "color": "green"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 0,
+        "y": 114
+      },
+      "id": 44,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "background",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, CASE WHEN ok THEN 1 ELSE 0 END AS value\nFROM collector_heartbeats\nWHERE $__timeFilter(ts)\nORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Heartbeat",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          },
+          "unit": "ms",
+          "decimals": 0
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 4,
+        "x": 4,
+        "y": 114
+      },
+      "id": 45,
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "none",
+        "graphMode": "area"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, duration_ms AS \"ms\"\nFROM collector_heartbeats\nWHERE $__timeFilter(ts)\nORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Длительность цикла",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 16,
+        "x": 8,
+        "y": 114
+      },
+      "id": 46,
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT ts, ok, error, duration_ms\nFROM collector_heartbeats\nWHERE error IS NOT NULL\nORDER BY ts DESC\nLIMIT 20",
+          "refId": "A"
+        }
+      ],
+      "title": "Последние ошибки poller",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "evaconnect-pg"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": false
+          },
+          "unit": "ms"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 118
+      },
+      "id": 47,
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "evaconnect-pg"
+          },
+          "editorMode": "code",
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT ts AS time, duration_ms AS \"ms\"\nFROM collector_heartbeats\nWHERE $__timeFilter(ts)\nORDER BY ts",
+          "refId": "A"
+        }
+      ],
+      "title": "Длительность цикла poller, мс",
+      "type": "timeseries"
     }
   ],
   "refresh": "30s",
   "schemaVersion": 39,
-  "tags": ["evolute", "evaconnect"],
-  "templating": { "list": [] },
-  "time": { "from": "now-6h", "to": "now" },
+  "tags": [
+    "evolute",
+    "evaconnect"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
   "timepicker": {},
-  "timezone": "browser",
+  "timezone": "Europe/Moscow",
   "title": "Evolute",
   "uid": "evaconnect-evolute",
-  "version": 1
+  "version": 3
 }
