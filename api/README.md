@@ -12,9 +12,10 @@ Machine-readable source of truth: [`openapi.yaml`](openapi.yaml) (OpenAPI 3.1).
 
 ## Quickstart
 
-Access token from `POST /id-service/auth/sign-in` or a rotated
-`POST /id-service/auth/refresh-token`. Header name is `access-token`, not
-`Authorization`.
+Get `accessToken` / `refreshToken` with SMS OTP, then send header
+`access-token` (not Bearer). Full sequence: [authentication.md](docs/authentication.md).
+
+Bootstrap (no token):
 
 ```bash
 curl -sS 'https://app.evassist.ru/id-service/info' \

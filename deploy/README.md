@@ -12,7 +12,8 @@ cp .env.example .env
 chmod 600 .env
 
 # file MUST exist before compose up (otherwise Docker makes a directory)
-# copy AFTER the last local evolute/poller use — refresh rotates the pair
+# Obtain it locally first (README.md → Auth: request_otp + sign_in),
+# then copy AFTER the last local evolute/poller use — refresh rotates the pair
 cp /path/to/credentials.json ./credentials.json
 chmod 600 credentials.json
 test -f credentials.json   # must be a file, not a directory

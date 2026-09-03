@@ -13,6 +13,9 @@ the Android-shaped client used by evaconnect never sets that header.
 
 OpenAPI: `components.securitySchemes.accessToken`.
 
+A step-by-step login that writes `~/.config/evolute/credentials.json` is in
+the repository [README](../../README.md#auth). Below is the same flow as HTTP.
+
 ## Client headers (not proven required)
 
 Every evaconnect request also sends:
@@ -29,16 +32,35 @@ Every evaconnect request also sends:
 Whether the server rejects other device/app strings was not A/B tested.
 `Time-Zone` is **not** sent by evaconnect; effect of sending it is unknown.
 
-## Login
+## Obtain a token pair
 
-Unauthenticated:
-
-1. `GET /id-service/info` — read `capcha`. If false, `capchaToken` may be `""`.
-2. `POST /id-service/auth/sign-up` with `{ "phone", "phoneCountry", "capchaToken" }` — one SMS.
-3. `POST /id-service/auth/sign-in` with `{ "phone", "code" }` — tokens.
+Unauthenticated. Own account only. Each `sign-up` sends **one SMS**.
 
 Phone / `phoneCountry` canonical format is **unknown**. Pass the same strings
-the official app would; do not invent a mask.
+the official app would.
+
+```bash
+BASE=https://app.evassist.ru
+H='accept: application/json'
+H2='content-type: application/json'
+H3='cache-control: no-cache'
+H4='x-device: android'
+H5='x-app: mobile'
+H6='x-app-version: 5.1.22 (740)'
+
+# 1. Optional: captcha flag (spelling is capcha)
+curl -sS "$BASE/id-service/info" -H "$H" -H "$H3" -H "$H4" -H "$H5" -H "$H6"
+
+# 2. Request OTP. capchaToken may be "" when capcha is false.
+curl -sS -X POST "$BASE/id-service/auth/sign-up" \
+  -H "$H" -H "$H2" -H "$H3" -H "$H4" -H "$H5" -H "$H6" \
+  -d '{"phone":"00000000000","phoneCountry":"XX","capchaToken":""}'
+
+# 3. Exchange the SMS code for tokens
+curl -sS -X POST "$BASE/id-service/auth/sign-in" \
+  -H "$H" -H "$H2" -H "$H3" -H "$H4" -H "$H5" -H "$H6" \
+  -d '{"phone":"00000000000","code":"000000"}'
+```
 
 Token JSON (field names as on the wire):
 
@@ -52,9 +74,33 @@ Token JSON (field names as on the wire):
 }
 ```
 
-`userToken` and `widgetId` are stored by evaconnect and were present on live
-sign-in/refresh. Their use on later requests was not observed (data calls use
-`access-token` only).
+Save `accessToken` and `refreshToken`. `userToken` and `widgetId` were present
+on live sign-in/refresh; later data calls used `access-token` only.
+
+Runnable copies: [`examples/api.http`](../examples/api.http) (`sign-up`,
+`sign-in`, then authenticated requests).
+
+## Use the access token
+
+Send it on every authenticated request:
+
+```bash
+curl -sS "$BASE/id-service/user" \
+  -H "access-token: <YOUR_TOKEN>" \
+  -H "$H" -H "$H3" -H "$H4" -H "$H5" -H "$H6"
+
+curl -sS -X POST "$BASE/car-service/car/v2/search" \
+  -H "access-token: <YOUR_TOKEN>" \
+  -H "$H" -H "$H2" -H "$H3" -H "$H4" -H "$H5" -H "$H6" \
+  -d '{"limit":20,"offset":0,"filters":[]}'
+```
+
+Then telemetry uses IMEI from the vehicle card, trips use mongo `_id`. See
+[quirks](quirks.md) for the two identifiers.
+
+With evaconnect, do not paste tokens into each command: `sign_in` writes
+`~/.config/evolute/credentials.json`, and `evolute status` / the poller read
+that file.
 
 ## Refresh
 
