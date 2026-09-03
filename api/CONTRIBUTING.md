@@ -1,5 +1,7 @@
 # Contributing
 
+[Русский](CONTRIBUTING.ru.md)
+
 This tree documents a **reverse-engineered** private companion API. The bar
 is evidence, not completeness.
 
@@ -16,8 +18,9 @@ is evidence, not completeness.
    ids, and emails from captures and examples. Use `<YOUR_TOKEN>`,
    `00000000000`, `aaaaaaaaaaaaaaaaaaaaaaaa`, `user@example.com`.
 5. Keep `openapi.yaml` as the source of truth. Update README endpoint table
-   and `docs/quirks.md` in the same change.
-6. English only in this directory.
+   and `docs/quirks.md` in the same change (and the `*.ru.md` translations).
+6. English files in this directory are canonical. Russian `*.ru.md` files are
+   translations; do not add facts there that are missing from English.
 
 ## Captures
 

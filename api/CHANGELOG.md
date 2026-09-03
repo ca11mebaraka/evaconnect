@@ -1,5 +1,7 @@
 # Changelog
 
+[Русский](CHANGELOG.ru.md)
+
 All notable changes to this unofficial API description are documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
@@ -18,3 +20,4 @@ for the OpenAPI `info.version` field.
 - REST Client (`examples/api.http`) and Bruno collection vars
   (`examples/collection.bru`).
 - Spectral lint workflow on `api/openapi.yaml`.
+- Russian translations: `README.ru.md`, `docs/*.ru.md`, `CONTRIBUTING.ru.md`.

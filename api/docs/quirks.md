@@ -1,5 +1,7 @@
 # Quirks
 
+[Русский](quirks.ru.md)
+
 Behavior that does not match a typical REST companion API. All items below
 were seen live unless marked otherwise.
 

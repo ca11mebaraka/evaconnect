@@ -1,5 +1,7 @@
 # Deploy poller + Postgres (existing Grafana)
 
+[Русский](README.ru.md)
+
 Same host as Grafana at `rn.melikhov.biz`. Compose starts **only** `db` and `poller`.
 Do not publish Postgres beyond loopback.
 

@@ -1,5 +1,7 @@
 # Authentication
 
+[Русский](authentication.ru.md)
+
 ## Scheme
 
 The companion API authenticates with an API key **header**:

@@ -1,5 +1,7 @@
 # Rate limits
 
+[Русский](rate-limits.ru.md)
+
 No server-side rate limit, quota header, or HTTP 429 was observed in the
 2026-08-30 / 2026-09-02 captures.
 

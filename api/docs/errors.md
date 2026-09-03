@@ -1,5 +1,7 @@
 # Errors
 
+[Русский](errors.ru.md)
+
 Only these HTTP statuses were seen on production. Response **bodies** were not
 captured as a stable schema; do not assume `{ "error": "..." }`.
 

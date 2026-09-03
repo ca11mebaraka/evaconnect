@@ -1,5 +1,7 @@
 # evaconnect
 
+[Русский](README.ru.md)
+
 Typed Python client and stdio MCP server for the Evolute companion API
 (`https://app.evassist.ru`). Own account / own vehicle only.
 
@@ -43,11 +45,13 @@ Entry points after install:
 - `evaconnect-mcp` — stdio MCP server
 - `evaconnect-poller` — write telemetry/trips to Postgres for Grafana
 
-Remote poller + Postgres next to an existing Grafana: see [deploy/README.md](deploy/README.md).
+Remote poller + Postgres next to an existing Grafana: see [deploy/README.md](deploy/README.md)
+([RU](deploy/README.ru.md)).
 Grafana dashboard JSON: [deploy/grafana/dashboards/evolute.json](deploy/grafana/dashboards/evolute.json)
 (folder **Evolute**, uid `evaconnect-evolute`, timezone `Europe/Moscow`).
 
-Unofficial reverse-engineered HTTP spec (CC0, not vendor docs): [api/README.md](api/README.md).
+Unofficial reverse-engineered HTTP spec (CC0, not vendor docs): [api/README.md](api/README.md)
+([RU](api/README.ru.md)).
 
 ## Auth
 
@@ -136,7 +140,7 @@ curl -sS 'https://app.evassist.ru/id-service/user' \
 
 Poller / Grafana: copy that `credentials.json` onto the server **after** the
 last local use (refresh **rotates** `refreshToken`). See
-[deploy/README.md](deploy/README.md).
+[deploy/README.md](deploy/README.md) ([RU](deploy/README.ru.md)).
 
 MCP: point `EVOLUTE_CREDENTIALS` at the file, or leave tokens out of
 `mcp.json` so the default path is used. Do not put live tokens in git.
@@ -144,7 +148,8 @@ MCP: point `EVOLUTE_CREDENTIALS` at the file, or leave tokens out of
 When a data request returns **401**, the client refreshes once, writes the
 **new** pair back to the file, and retries. If refresh itself returns 401,
 the pair is dead — run `sign_in` again. HTTP details:
-[api/docs/authentication.md](api/docs/authentication.md).
+[api/docs/authentication.md](api/docs/authentication.md)
+([RU](api/docs/authentication.ru.md)).
 
 ## Library
 
@@ -240,7 +245,7 @@ Datasource uid `evaconnect-pg`. Rows:
 | Поездки | Extra table (`battery_first`/`last`) and distance/consumption chart. Overview trips `title` is MSK from `start_date`/`end_date` |
 | Poller | Cycle duration and errors |
 
-Trip addresses and coordinates are not stored. See [deploy/README.md](deploy/README.md).
+Trip addresses and coordinates are not stored. See [deploy/README.md](deploy/README.md) ([RU](deploy/README.ru.md)).
 
 ## Spec gaps (explicit parameters, no guessing)
 
@@ -249,10 +254,12 @@ Trip addresses and coordinates are not stored. See [deploy/README.md](deploy/REA
   (`DURATION` / `DISTANCE` and `ASC` are also valid).
 - `distance` units (m vs km) are unknown — raw `int`, no conversion.
 - Access-token TTL is unknown — one auto-refresh on HTTP 401, no loop.
-- Charge-session body when charging is not fully specified. See [api/docs/quirks.md](api/docs/quirks.md).
+- Charge-session body when charging is not fully specified. See [api/docs/quirks.md](api/docs/quirks.md)
+([RU](api/docs/quirks.ru.md)).
 - `Time-Zone` header is unused (not confirmed).
 
-Full endpoint table and `x-status` markers: [api/README.md](api/README.md).
+Full endpoint table and `x-status` markers: [api/README.md](api/README.md)
+([RU](api/README.ru.md)).
 
 ## License
 

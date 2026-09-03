@@ -1,5 +1,7 @@
 # Evolute companion API (unofficial)
 
+[Русский](README.ru.md)
+
 [![lint](https://github.com/ca11mebaraka/evaconnect/actions/workflows/lint.yml/badge.svg)](https://github.com/ca11mebaraka/evaconnect/actions/workflows/lint.yml)
 [![License: CC0-1.0](https://img.shields.io/badge/License-CC0_1.0-lightgrey.svg)](LICENSE)
 
@@ -71,12 +73,12 @@ Vehicle command **send** is not listed. Command names appear on telemetry
 
 ## Docs
 
-- [Authentication](docs/authentication.md)
-- [Rate limits](docs/rate-limits.md)
-- [Errors](docs/errors.md)
-- [Quirks](docs/quirks.md)
+- [Authentication](docs/authentication.md) ([RU](docs/authentication.ru.md))
+- [Rate limits](docs/rate-limits.md) ([RU](docs/rate-limits.ru.md))
+- [Errors](docs/errors.md) ([RU](docs/errors.ru.md))
+- [Quirks](docs/quirks.md) ([RU](docs/quirks.ru.md))
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md). OpenAPI changes must keep `x-status` /
+See [CONTRIBUTING.md](CONTRIBUTING.md) ([RU](CONTRIBUTING.ru.md)). OpenAPI changes must keep `x-status` /
 `x-discovered` / `x-source` honest. Do not invent endpoints.
